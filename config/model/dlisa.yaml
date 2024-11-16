@@ -1,0 +1,78 @@
+# Managed by Hydra
+
+model_name:
+  _target_: dlisa.model.dlisa.DLISA
+
+network:
+  max_num_proposals: 80
+  use_contrastive_loss: True
+  clip_model: ViT-B/32
+  use_2d_feature: True
+  use_3d_features: True
+
+  detector:
+    output_channel: 32
+    use_gt_proposal: False
+
+  object_renderer:
+    eye: [[0.86, 0.5, 1], [-0.86, 0.5, 1], [0, -1, 1]]
+    rasterizer_setting:
+      image_size: 224
+      radius: 0.025
+      points_per_pixel: 3
+      bin_size: 0
+  
+  camera_pose_generator:
+    input_channel: 128
+    hidden_size: 128
+
+  clip_word_encoder:
+    _target_: dlisa.model.language_module.clip_word_encoder.CLIPWordEncoder
+    output_channel: 128
+    dropout: 0.1
+
+  clip_img_encoder:
+    output_channel: 128
+    dropout: 0.1
+
+  matching_module:
+    feat_channel: 128
+    head: 4
+    depth: 2
+
+  nms:
+    iou_threshold: 0.4
+  
+  dynamic_box_module:
+    init_threshold: 15.0
+    temperature: 1000
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0005
+  weight_decay: 0.00001
+
+lr_decay:
+  start_epoch: 30
+
+loss:
+  reference_bce_loss:
+    _target_: dlisa.loss.reference_loss.RefBCELoss
+    iou_threshold: 0.25
+    matching_strategy: hungarian
+
+  reference_ce_loss:
+    _target_: dlisa.loss.reference_loss.RefCELoss
+    iou_threshold: 0
+
+  contrastive_loss:
+    _target_: dlisa.loss.contrastive_loss.SinglePairContrastiveLoss
+    temperature: 2.6593
+    split_batch: False
+  
+  dynamic_loss:
+    _target_: dlisa.loss.dynamic_loss.DynamicLoss
+    alpha: 5
+
+inference:
+  output_threshold_list: [0.05, 0.1, 0.15, 0.2, 0.25]
