@@ -76,13 +76,11 @@ CheckPoint performance:
 ## Reference
 If you find our work or any of our materials useful, please cite our paper:
 ```
-@misc{zhang2024dlisa,
-      title={Multi-Object 3D Grounding with Dynamic Modules and Language-Informed Spatial Attention}, 
-      author={Haomeng Zhang and Chiao-An Yang and Raymond A. Yeh},
-      year={2024},
-      eprint={2410.22306},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{zhang2024dlisa,
+    title={Multi-Object 3D Grounding with Dynamic Modules and Language-Informed Spatial Attention}, 
+    author={Haomeng Zhang and Chiao-An Yang and Raymond A. Yeh},
+    booktitle={Proc. NeurIPS},
+    year={2024}
 }
 ```
      
